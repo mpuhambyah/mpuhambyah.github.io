@@ -1,7 +1,8 @@
 name: Build and Deploy
+
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -10,28 +11,29 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Cache node modules
         uses: actions/cache@v2
         with:
           path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install 🔧
-        run: yarn install
+      - name: Install dependencies
+        run: npm install
 
-      - name: Build 🔧
+      - name: Build
         run: |
-          yarn export
+          npm run build
           touch out/.nojekyll
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_SECRET }}
 
-      - name: Deploy 🚀
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.6.1
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN_SECRET }}
-          BRANCH: production # Nama branch yang akan digunakan.
-          FOLDER: out # Folder yang akan dideploy
-          CLEAN: true # Hapus file di dalam branch
+          BRANCH: production
+          FOLDER: out
+          CLEAN: true
