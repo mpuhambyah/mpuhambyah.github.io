@@ -43,6 +43,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN_SECRET }}
-          BRANCH: main
+          BRANCH: production
           FOLDER: out
           CLEAN: true
