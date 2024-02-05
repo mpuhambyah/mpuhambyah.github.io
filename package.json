@@ -5,9 +5,10 @@
   "scripts": {
     "compileCss": "tailwindcss -i ./public/build/tailwind.css -o ./public/assets/css/style.css --watch",
     "dev": "next dev",
-    "build": "next build && mkdir -p out && cp -r .next/* out/",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export" : "next build && next export"
   },
   "dependencies": {
     "autoprefixer": "10.4.16",
