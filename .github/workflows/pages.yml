@@ -1,4 +1,5 @@
 name: Build and Deploy
+
 on:
   push:
     branches: [main]
@@ -10,27 +11,37 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-      - uses: actions/checkout@v2
+      - name: Check if TOKEN_SECRET is set
+        run: |
+          if [ -z "${{ secrets.TOKEN_SECRET }}" ]; then
+            echo "Error: TOKEN_SECRET is not set"
+            exit 1
+          else
+            echo "TOKEN_SECRET is set"
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Cache node modules
         uses: actions/cache@v2
         with:
           path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install 🔧
-        run: yarn install
+      - name: Install dependencies
+        run: npm install
 
-      - name: Build 🔧
+      - name: Build
         run: |
-          yarn export
+          npm run build
           touch out/.nojekyll
           touch .nojekyll
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_SECRET }}
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.6.1
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN_SECRET }}
           BRANCH: production
