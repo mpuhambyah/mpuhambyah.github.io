@@ -28,10 +28,10 @@ jobs:
           npm run build
           touch out/.nojekyll
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_SECRET }}
+          GITHUB_TOKEN: eaea
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.6.1
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN_SECRET }}
           BRANCH: main
