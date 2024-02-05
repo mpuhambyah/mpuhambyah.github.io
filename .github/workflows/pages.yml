@@ -11,6 +11,15 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
+      - name: Check if TOKEN_SECRET is set
+        run: |
+          if [ -z "${{ secrets.TOKEN_SECRET }}" ]; then
+            echo "Error: TOKEN_SECRET is not set"
+            exit 1
+          else
+            echo "TOKEN_SECRET is set"
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v2
 
